@@ -1,0 +1,167 @@
+<html>
+  <head>
+    <title>Hash Simply</title>
+      <link href="https://fonts.googleapis.com/css?family=Roboto|Raleway" rel="stylesheet">
+      <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <link rel="stylesheet" type="text/css" href="./css/style.css">
+      <script type="text/javascript" src="./js/papaparse.js"></script>
+      <script type="text/javascript" src="./js/home.js"></script>
+      <script type="text/javascript" src="./js/bootstrap-filestyle.js"></script>
+      <link rel="icon" type="image/png" href="./logo_blue.png">
+  </head>
+
+  <body>
+    <div class="loading">
+      <img src="../blue_spinner.gif">
+    </div>
+    <div class="header-header">
+    </div>
+    <div class="header">
+      <div class="header-title">
+        Hash Simply
+      </div>
+      <div class="subHeader">
+        Quickly hash a file to share and compare without sacrificing your list
+      </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Processing File...</h4>
+          </div>
+          <div class="modal-body">
+            <h3 id="progressStage"></h3>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row formRow">
+        <div class="col-xs-12">
+          <div class="row">
+            <div name="singleFile" class="col-md-4">
+              <h2 class="jobTitle">Hash Single File</h2>
+              <p>Hash your file to send an encrypted file to someone else</p>
+              <div class="col-md-12">
+                <h3 class="singleTitle">Upload File</h3>
+                <div class="row">
+                  <div class="form-group col-md-offset-2 col-md-8">
+                    <label>
+                      File
+                    </label>
+                    <input name="singleFile" id="singleFile" type="file" class="filestyle" data-icon="false" data-buttonName="button"></input>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-md-offset-2 col-md-4">
+                    <label>Field to Hash</label>
+                    <select name="singleHashField" id="singleFile-hash" class="form-control" disabled="disabled">
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label class="spacer">-</label>
+                    <button id="singleSend" class="btn btn-default button form-control" disabled="disabled">Hash</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <h2 class="jobTitle">Compare Two Files</h2>
+              <p>Compare your unencrypted file with someone else's hashed file</p>
+              <div name="myFile" class="col-md-6">
+                <h3 class="compareTitle">My File</h3>
+                <div class="row">
+                  <div class="form-group col-md-offset-2 col-md-8">
+                    <label>
+                      File
+                    </label>
+                    <input name="myFile" id="myFile" type="file" class="filestyle" data-icon="false" data-buttonName="button"></input>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-md-offset-2 col-md-4">
+                    <label>Field to Hash</label>
+                    <select name="myHashField" id="myFile-hash" class="form-control" disabled="disabled">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div name="compareFile" class="col-md-6">
+                <h3 class="compareTitle">Compare File</h3>
+                <div class="row">
+                  <div class="form-group col-md-offset-2 col-md-8">
+                    <label>
+                      File
+                    </label>
+                    <input name="otherFile" id="compareFile" type="file" class="filestyle" data-icon="false" data-buttonName="button"></input>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-md-offset-2 col-md-4">
+                    <label>Hashed Field</label>
+                    <select name="otherHashField" id="compareFile-hash" class="form-control" disabled="disabled">
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label class="spacer">-</label>
+                    <button id="send" class="btn btn-default button form-control" disabled="disabled">Compare</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row formRow">
+        <div class="col-md-4">
+          <h3 class="singleTitle">Instructions</h3>
+          <div class="instructionsDiv">
+            <ul>
+              <li>Upload your data (as .csv) from the mailer or CRM that you want to exchange (one column must be the column that you want to hash)</li>
+              <li>The dropdown for "Field to Hash" will automatically populate - select the field you want to hash</li>
+              <li>Download a file with only hashed data to send, and one with your original data and the hash</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <h3 class="compareTitle">Instructions</h3>
+          <div class="col-md-6">
+            <div class="instructionsDiv">
+              <ul>
+                <li>Upload your data from the mailer or CRM that you want to exchange (one column must be the column that you want to hash)</li>
+                <li>The dropdown for "Field to Hash" will automatically populate - select the field you want to compare</li>
+                <li>Upload the pre-hashed file that you were sent and select the "Hashed Field" you want to use to compare</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="instructionsDiv">
+              You will automatically download a zip folder with 3 files:
+              <ul>
+                <li>Your unique rows that don't overlap with the encrypted list (with full data)</li>
+                <li>The unique rows from the encryped list you are comparing to (with only hashes)</li>
+                <li>The overlap between the two files with hashes and data</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <p class="row col-xs-4 col-xs-offset-4 warning">Warning: md5 hashing is not a secure encryption method - do not use this tool to transfer any sensitive information such as passwords or payment data</p>
+        <p><a class="row col-xs-4 col-xs-offset-4 footerlink" href="https://github.com/ajkahle/hash-help">View on Github</a>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

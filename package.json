@@ -1,0 +1,36 @@
+{
+  "name": "hash-help",
+  "version": "0.1.0",
+  "description": "Automatically hash your email lists for swapping",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "archiver": "*",
+    "array-compare": "^2.0.0",
+    "async": "*",
+    "connect": "*",
+    "dotenv": "*",
+    "express": "*",
+    "json2csv": "*",
+    "md5": "*",
+    "request": "*",
+    "stream": "*",
+    "websocket-stream": "*",
+    "ws": "*"
+  },
+  "engines": {
+    "node": "6.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajkahle/hash-help"
+  },
+  "keywords": [
+    "email",
+    "list",
+    "hash"
+  ],
+  "license": "MIT"
+}

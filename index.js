@@ -21,6 +21,17 @@ console.log("http server listening on %d", port);
 
 app.use(express.static(__dirname + '/public'));
 
+/**
+  * Redirect all http requests to https
+**/
+App.use(function(req,res,next){
+  if(req.headers['x-forwarded-proto']!='https'&&req.get('host')!='localhost:5000'){
+    res.redirect('https://'+req.get('host')+req.url);
+  }else{
+    next();
+  }
+});
+
 app.get('/',function(req,res){
   res.sendFile(__dirname+'/public/home.html');
 });

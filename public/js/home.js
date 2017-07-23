@@ -37,7 +37,7 @@ $(document).ready(function(){
 
   $('#singleSend').click(function(d){
     $('.modal').modal();
-    $('#progressStage').text("Preparing Files");
+    $('#progressStage').text("Preparing File");
     $('.progress-bar').width("0%");
 
     var myFile = document.getElementById('singleFile').files[0];
@@ -46,6 +46,9 @@ $(document).ready(function(){
       worker:true,
       header:true,
       skipEmptyLines:true,
+      step:function(e){
+        $('#progressStage').text("Preparing File - Row "+e.indexes[0]);
+      },
       complete:function(my){
         ws.send(JSON.stringify({id:"singleFile",myData:my.data,myHashField:$('#singleFile-hash').val()}));
       }
@@ -54,7 +57,7 @@ $(document).ready(function(){
 
   $('#send').click(function(d){
     $('.modal').modal();
-    $('#progressStage').text("Preparing Files");
+    $('#progressStage').text("Preparing My File");
     $('.progress-bar').width("0%");
     var myFile        = document.getElementById('myFile').files[0],
         compareFile   = document.getElementById('compareFile').files[0];
@@ -62,11 +65,17 @@ $(document).ready(function(){
       worker:true,
       header:true,
       skipEmptyLines:true,
+      step:function(e){
+        $('#progressStage').text("Preparing My File - Row "+e.indexes[0]);
+      },
       complete:function(my){
         Papa.parse(compareFile,{
           worker:true,
           header:true,
           skipEmptyLines:true,
+          step:function(e){
+            $('#progressStage').text("Preparing Compare File - Row "+e.indexes[0]);
+          },
           complete:function(compare){
             ws.send(JSON.stringify({id:"file",myData:my.data,myHashField:$('#myFile-hash').val(),compareData:compare.data,compareHashField:$('#compareFile-hash').val()}));
           }

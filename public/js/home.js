@@ -40,17 +40,21 @@ $(document).ready(function(){
     $('#progressStage').text("Preparing File");
     $('.progress-bar').width("0%");
 
-    var myFile = document.getElementById('singleFile').files[0];
+    var myFile = document.getElementById('singleFile').files[0],
+        parsedFile = [];
 
     Papa.parse(myFile,{
       worker:true,
       header:true,
       skipEmptyLines:true,
+      chunkSize:1024,
       step:function(e){
-        $('#progressStage').text("Preparing File - Row "+e.indexes[0]);
+        $('#progressStage').text("Preparing File "+parseInt(e.meta.cursor/myFile.size * 100)+"%");
+        $('.progress-bar').width(parseInt(e.meta.cursor/myFile.size * 100)+"%");
+        parsedFile.push(e.data[0]);
       },
       complete:function(my){
-        ws.send(JSON.stringify({id:"singleFile",myData:my.data,myHashField:$('#singleFile-hash').val()}));
+        ws.send(JSON.stringify({id:"singleFile",myData:parsedFile,myHashField:$('#singleFile-hash').val()}));
       }
     });
   });
@@ -60,24 +64,33 @@ $(document).ready(function(){
     $('#progressStage').text("Preparing My File");
     $('.progress-bar').width("0%");
     var myFile        = document.getElementById('myFile').files[0],
-        compareFile   = document.getElementById('compareFile').files[0];
+        compareFile   = document.getElementById('compareFile').files[0],
+        myParsedFile  = [],
+        compareParsedFile = [];
     Papa.parse(myFile,{
       worker:true,
       header:true,
       skipEmptyLines:true,
+      chunkSize:1024,
       step:function(e){
-        $('#progressStage').text("Preparing My File - Row "+e.indexes[0]);
+        $('#progressStage').text("Preparing My File "+parseInt(e.meta.cursor/myFile.size * 100)+"%");
+        $('.progress-bar').width(parseInt(e.meta.cursor/myFile.size * 100)+"%");
+        myParsedFile.push(e.data[0]);
       },
       complete:function(my){
+        $('#progressStage').text("Preparing Compare File");
+        $('.progress-bar').width("0%");
         Papa.parse(compareFile,{
           worker:true,
           header:true,
           skipEmptyLines:true,
           step:function(e){
-            $('#progressStage').text("Preparing Compare File - Row "+e.indexes[0]);
+            $('#progressStage').text("Preparing Compare File "+parseInt(e.meta.cursor/compareFile.size * 100)+"%");
+            $('.progress-bar').width(parseInt(e.meta.cursor/compareFile.size * 100)+"%");
+            compareParsedFile.push(e.data[0]);
           },
           complete:function(compare){
-            ws.send(JSON.stringify({id:"file",myData:my.data,myHashField:$('#myFile-hash').val(),compareData:compare.data,compareHashField:$('#compareFile-hash').val()}));
+            ws.send(JSON.stringify({id:"file",myData:myParsedFile,myHashField:$('#myFile-hash').val(),compareData:compareParsedFile,compareHashField:$('#compareFile-hash').val()}));
           }
         });
       }

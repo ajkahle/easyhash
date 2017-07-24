@@ -36,7 +36,10 @@ $(document).ready(function(){
   });
 
   $('#singleSend').click(function(d){
-    $('.modal').modal();
+    $('.modal').modal({
+      backdrop:"static",
+      keyboard:false
+    });
     $('#progressStage').text("Preparing File");
     $('.progress-bar').width("0%");
 
@@ -60,7 +63,10 @@ $(document).ready(function(){
   });
 
   $('#send').click(function(d){
-    $('.modal').modal();
+    $('.modal').modal({
+      backdrop:"static",
+      keyboard:false
+    });
     $('#progressStage').text("Preparing My File");
     $('.progress-bar').width("0%");
     var myFile        = document.getElementById('myFile').files[0],

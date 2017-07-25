@@ -69,7 +69,9 @@ wss.on("connection",function(ws){
               archive.append(json2csv({data:parsed,fields:Object.keys(parsed[0])}).toString("base64"),{name:'all_data.csv'});
 
               archive.on('error', function(err) {
-                throw err;
+                console.log("ERROR - Archive");
+                console.log(err);
+                ws.send(JSON.stringify({id:"error",msg:err}));
               });
 
               archive.on('end',function(){
@@ -115,6 +117,12 @@ wss.on("connection",function(ws){
             }
           });
 
+          compare.on('error',function(err){
+            console.log("ERROR - Compare");
+            console.log(err);
+            ws.send(JSON.stringify({id:"error",msg:err}));
+          });
+
           compare.on('done',function(files){
             console.log("INFO - Finished Comparing Compare File Job");
             ws.send(JSON.stringify({id:"progress",type:"archive"}));
@@ -126,7 +134,9 @@ wss.on("connection",function(ws){
           compare.run(parsed,data.compareData,'hash',data.compareHashField);
 
           archive.on('error', function(err) {
-            throw err;
+            console.log("ERROR - Archive");
+            console.log(err);
+            ws.send(JSON.stringify({id:"error",msg:err}));
           });
 
           archive.on('end',function(){

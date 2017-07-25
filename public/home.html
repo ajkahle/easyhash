@@ -27,7 +27,40 @@
       </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog">
+    <div id="error" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Connection Reset</h4>
+          </div>
+          <div class="modal-body">
+            <h3>An error occured</h3>
+            <div id="error-msg" class="alert alert-danger"></div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default button" id="errorButton">Refresh Page</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="warning" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Connection Reset</h4>
+          </div>
+          <div class="modal-body">
+            <h3>Your connection has expired. Please refresh your page.</h3>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default button" id="warningButton">Refresh Page</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="progress-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">

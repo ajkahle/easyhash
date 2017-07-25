@@ -2,6 +2,7 @@ var host = location.origin.replace(/^http/, 'ws'),
     ws = new WebSocket(host);
 
 ws.onopen = function(){
+  console.log("INFO - Connection opened");
   ws.send(JSON.stringify({id:"ping"}));
 };
 
@@ -36,7 +37,7 @@ $(document).ready(function(){
   });
 
   $('#singleSend').click(function(d){
-    $('.modal').modal({
+    $('#progress-modal').modal({
       backdrop:"static",
       keyboard:false
     });
@@ -63,7 +64,7 @@ $(document).ready(function(){
   });
 
   $('#send').click(function(d){
-    $('.modal').modal({
+    $('#progress-modal').modal({
       backdrop:"static",
       keyboard:false
     });
@@ -119,6 +120,19 @@ ws.onmessage = function(event){
             ws.send(JSON.stringify({id:"ping"}));
           },20000);
         break;
+        case "error":
+          console.log("ERROR - Server side");
+          $('#error').modal({
+            keyboard:false,
+            backdrop:"static"
+          });
+
+          $('#error-msg').text(data.msg);
+
+          $('#errorButton').on("click",function(){
+            location.reload();
+          });
+        break;
         case "file":
           switch(data.type){
             case "done":
@@ -142,7 +156,7 @@ ws.onmessage = function(event){
                     .attr("disabled","disabled");
 
                 setTimeout(function(){
-                  $('.modal').modal('hide');
+                  $('#progress-modal').modal('hide');
                 },3000);
             break;
           }
@@ -170,4 +184,16 @@ ws.onmessage = function(event){
       }
     break;
   }
+};
+
+ws.onclose = function(event){
+  console.log("INFO - Connection closed");
+  $('#warning').modal({
+    keyboard:false,
+    backdrop:"static"
+  });
+
+  $('#warningButton').on("click",function(){
+    location.reload();
+  });
 };

@@ -13,3 +13,8 @@
 - Parses 2 csv files and sends JSON to server
 - Hashes first file and compares the designated fields across both
 - Returns zip file including: your unique data (for swapping), overlap, and other unique data
+
+### Pull requests
+*Pull requests are encouraged!*
+
+Have suggestions? Submit an issue or a pull request.

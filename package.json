@@ -1,7 +1,7 @@
 {
-  "name": "hash-help",
-  "version": "0.1.0",
-  "description": "Automatically hash your email lists for swapping",
+  "name": "hash-simply",
+  "version": "1.1.0",
+  "description": "Automatically hash your email lists for comparison",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ajkahle/hash-help"
+    "url": "https://github.com/ajkahle/hash-simply"
   },
   "keywords": [
     "email",

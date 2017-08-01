@@ -1,17 +1,16 @@
 body{
   font-family:'Raleway',Arial,sans-serif;
   margin:0;
-  background-color:#E1E2E1;
+  background-color:#F5F5F6;
 }
 
 .header-header{
-  background-color:#002171;
+  background-color:#0069c0;
   height:2%;
 }
 
 .header{
-  background-color:#0d47a1;
-  height:8%;
+  background-color:#2196f3;
   color:#ffffff;
 }
 
@@ -34,7 +33,7 @@ body{
 }
 
 .button{
-  background-color: #66bb6a;
+  background-color: #00e676;
   color:#000000;
 }
 
@@ -59,11 +58,11 @@ h3{
 }
 
 a{
-  color:#0d47a1;
+  color:#2196f3;
 }
 
 a:visited{
-  color:#0d47a1;
+  color:#2196f3;
 }
 
 .footerlink{
@@ -96,11 +95,11 @@ a:visited{
 }
 
 .singleTitle{
-  color: #0d47a1;
-  border-bottom: 3px solid #0d47a1;
+  color: #2196f3;
+  border-bottom: 3px solid #2196f3;
 }
 
 .compareTitle{
-  color: #66bb6a;
-  border-bottom: 3px solid #66bb6a;
+  color: #00e676;
+  border-bottom: 3px solid #00e676;
 }

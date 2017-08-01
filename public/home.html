@@ -5,6 +5,7 @@
       <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script src="./js/jquery.matchHeight.js" type="text/javascript"></script>
       <link rel="stylesheet" type="text/css" href="./css/style.css">
       <script type="text/javascript" src="./js/papaparse.js"></script>
       <script type="text/javascript" src="./js/home.js"></script>
@@ -83,9 +84,11 @@
           <div class="row">
             <div name="singleFile" class="col-lg-4">
               <div class="row col-xs-12">
-                <h2 class="jobTitle">Hash Single File</h2>
-                <p>Hash your file to send an encrypted file to someone else</p>
-                <div class="col-lg-12">
+                <div class="headerRow">
+                  <h2 class="jobTitle">Hash Single File</h2>
+                  <p>Hash your file to send an encrypted file to someone else</p>
+                </div>
+                <div class="col-lg-12 contentRow">
                   <h3 class="singleTitle">Upload File</h3>
                   <div class="row">
                     <div class="form-group col-lg-offset-2 col-lg-8">
@@ -108,7 +111,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row col-xs-12">
+              <div class="row col-xs-12 instructionsRow">
                 <h3 class="singleTitle">Instructions</h3>
                 <div class="instructionsDiv">
                   <ul>
@@ -122,9 +125,11 @@
             </div>
             <div class="col-lg-8">
               <div class="row col-xs-12">
-                <h2 class="jobTitle">Compare Two Files</h2>
-                <p>Compare your unencrypted file with someone else's hashed file</p>
-                <div name="myFile" class="col-lg-6">
+                <div class="headerRow">
+                  <h2 class="jobTitle">Compare Two Files</h2>
+                  <p>Compare your unencrypted file with someone else's hashed file</p>
+                </div>
+                <div name="myFile" class="col-lg-6 contentRow">
                   <h3 class="compareTitle">My File</h3>
                   <div class="row">
                     <div class="form-group col-lg-offset-2 col-lg-8">
@@ -142,7 +147,7 @@
                     </div>
                   </div>
                 </div>
-                <div name="compareFile" class="col-lg-6">
+                <div name="compareFile" class="col-lg-6 contentRow">
                   <h3 class="compareTitle">Compare File</h3>
                   <div class="row">
                     <div class="form-group col-lg-offset-2 col-lg-8">
@@ -165,7 +170,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row col-xs-12">
+              <div class="row col-xs-12 instructionsRow">
                 <h3 class="compareTitle">Instructions</h3>
                 <div class="col-lg-6">
                   <div class="instructionsDiv">

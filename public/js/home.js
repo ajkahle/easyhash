@@ -6,7 +6,16 @@ ws.onopen = function(){
   ws.send(JSON.stringify({id:"ping"}));
 };
 
+$(window).resize(function(){
+  $('.headerRow').matchHeight();
+  $('.contentRow').matchHeight();
+  $('.instructionsRow').matchHeight();
+})
+
 $(document).ready(function(){
+  $('.headerRow').matchHeight();
+  $('.contentRow').matchHeight();
+  $('.instructionsRow').matchHeight();
   $('input[type=file]').change(function(d){
     var thisId = $(this).attr('id');
     var file = document.getElementById(thisId).files[0];

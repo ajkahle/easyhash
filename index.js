@@ -55,8 +55,8 @@ wss.on("connection",function(ws){
               });
 
               ws.send(JSON.stringify({id:"progress",type:"done",stage:"archive"}));
-              archive.append(json2csv({data:hashOnly,fields:Object.keys(hashOnly[0])}).toString("base64"),{name:'hash_only.csv'});
-              archive.append(json2csv({data:parsed,fields:Object.keys(parsed[0])}).toString("base64"),{name:'all_data.csv'});
+              archive.append(json2csv.parse(hashOnly,{fields:Object.keys(hashOnly[0])}).toString("base64"),{name:'hash_only.csv'});
+              archive.append(json2csv.parse(parsed,{fields:Object.keys(parsed[0])}).toString("base64"),{name:'all_data.csv'});
 
               archive.on('error', function(err) {
                 console.log("ERROR - Archive");
@@ -116,9 +116,9 @@ wss.on("connection",function(ws){
           compare.on('done',function(files){
             console.log("INFO - Finished Comparing Compare File Job");
             ws.send(JSON.stringify({id:"progress",type:"archive"}));
-            archive.append(json2csv({data:files.found,fields:keys}).toString("base64"),{name:'overlap.csv'});
-            archive.append(json2csv({data:files.missing,fields:keys}).toString("base64"),{name:'my_unique.csv'});
-            archive.append(json2csv({data:files.added,fields:Object.keys(data.compareData[0])}).toString("base64"),{name:'other_unique.csv'});
+            archive.append(json2csv.parse(files.found,{fields:keys}).toString("base64"),{name:'overlap.csv'});
+            archive.append(json2csv.parse(files.missing,{fields:keys}).toString("base64"),{name:'my_unique.csv'});
+            archive.append(json2csv.parse(files.added,{fields:Object.keys(data.compareData[0])}).toString("base64"),{name:'other_unique.csv'});
           });
 
           compare.run(parsed,data.compareData,'hash',data.compareHashField);

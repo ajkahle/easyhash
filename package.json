@@ -17,6 +17,7 @@
     "lodash": "^4.17.21",
     "md5": "*",
     "request": "*",
+    "socket.io": "^4.4.1",
     "stream": "*",
     "websocket-stream": "*",
     "ws": "*"

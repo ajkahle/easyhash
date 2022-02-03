@@ -1,15 +1,8 @@
-console.log(`wss://${location.host}`)
+const socket = io();
 
-host = `wss://${location.host}/`
-
-console.log(host)
-
-var ws = new WebSocket(host);
-
-ws.onopen = function(){
-  console.log("INFO - Connection opened");
-  ws.send(JSON.stringify({id:"ping"}));
-};
+socket.on("connect",()=>{
+  console.log(socket.connected)
+})
 
 $(window).resize(function(){
   $('.headerRow').matchHeight();
@@ -71,8 +64,8 @@ $(document).ready(function(){
         $('.progress-bar').width(parseInt(e.meta.cursor/myFile.size * 100)+"%");
         parsedFile.push(e.data[0]);
       },
-      complete:function(my){
-        ws.send(JSON.stringify({id:"singleFile",myData:parsedFile,myHashField:$('#singleFile-hash').val()}));
+      complete:function(){
+        socket.emit("singleFile",JSON.stringify({id:"singleFile",data:parsedFile,hashField:$('#singleFile-hash').val()}));
       }
     });
   });
@@ -111,7 +104,7 @@ $(document).ready(function(){
             compareParsedFile.push(e.data[0]);
           },
           complete:function(compare){
-            ws.send(JSON.stringify({id:"file",myData:myParsedFile,myHashField:$('#myFile-hash').val(),compareData:compareParsedFile,compareHashField:$('#compareFile-hash').val()}));
+            socket.emit("compareFiles",JSON.stringify({id:"file",myData:myParsedFile,myHashField:$('#myFile-hash').val(),compareData:compareParsedFile,compareHashField:$('#compareFile-hash').val()}));
           }
         });
       }
@@ -121,86 +114,78 @@ $(document).ready(function(){
 
 var blobCombine = [];
 
-ws.onmessage = function(event){
-  switch(typeof event.data){
-    case "object":
-      blobCombine.push(event.data);
+socket.on("start",(msg)=>{
+  console.log(msg)
+})
+
+socket.on("progress",(msg)=>{
+  switch(data.type){
+    case "archive":
+      $('.progress-bar').width("100%");
+      $('#progressStage').text("Finalizing Files");
     break;
-    case "string":
-      var data = JSON.parse(event.data);
-      switch(data.id){
-        case "pong":
-          setTimeout(function(){
-            ws.send(JSON.stringify({id:"ping"}));
-          },20000);
-        break;
-        case "error":
-          console.log("ERROR - Server side");
-          $('#error').modal({
-            keyboard:false,
-            backdrop:"static"
-          });
-
-          $('#error-msg').text(data.msg);
-
-          $('#errorButton').on("click",function(){
-            location.reload();
-          });
-        break;
-        case "file":
-          switch(data.type){
-            case "done":
-              $('.progress-bar').width("100%");
-              $('#progressStage').text("Done!");
-              var file = new Blob(blobCombine);
-              var encodedUri = URL.createObjectURL(file);
-              var link = document.createElement('a');
-                  link.setAttribute("href", encodedUri);
-                  link.setAttribute("download", "files.zip");
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  $('input[type=file]')
-                    .val('');
-                  $('.bootstrap-filestyle>input[type=text]')
-                    .val('');
-                  $('select').empty()
-                    .attr("disabled","disabled");
-                  $('button')
-                    .attr("disabled","disabled");
-
-                setTimeout(function(){
-                  $('#progress-modal').modal('hide');
-                },3000);
-            break;
-          }
-        break;
-        case "progress":
-          switch(data.type){
-            case "archive":
-              $('.progress-bar').width("100%");
-              $('#progressStage').text("Finalizing Files");
-            break;
-            case "start":
-              $('.progress-bar').width("0%");
-              $('#progressStage').text(data.stage+" "+parseInt((data.progress*100))+"%");
-            break;
-            case "done":
-              $('.progress-bar').width("100%");
-              $('#progressStage').text(data.stage+" 100%");
-            break;
-            case "update":
-              $('.progress-bar').width((data.progress*100)+"%");
-              $('#progressStage').text(data.stage+" "+parseInt((data.progress*100))+"%");
-            break;
-          }
-        break;
-      }
+    case "start":
+      $('.progress-bar').width("0%");
+      $('#progressStage').text(data.stage+" "+parseInt((data.progress*100))+"%");
+    break;
+    case "done":
+      $('.progress-bar').width("100%");
+      $('#progressStage').text(data.stage+" 100%");
+    break;
+    case "update":
+      $('.progress-bar').width((data.progress*100)+"%");
+      $('#progressStage').text(data.stage+" "+parseInt((data.progress*100))+"%");
     break;
   }
-};
 
-ws.onclose = function(event){
+})
+
+socket.on("error",(msg)=>{
+  console.log("ERROR - Server side");
+  $('#error').modal({
+    keyboard:false,
+    backdrop:"static"
+  });
+
+  $('#error-msg').text(data.msg);
+
+  $('#errorButton').on("click",function(){
+    location.reload();
+  });
+})
+
+socket.on("data",(data)=>{
+  console.log(data)
+
+  blobCombine.push(data)
+})
+
+socket.on("completed",(msg)=>{
+  $('.progress-bar').width("100%");
+  $('#progressStage').text("Done!");
+  var file = new Blob(blobCombine);
+  var encodedUri = URL.createObjectURL(file);
+  var link = document.createElement('a');
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "files.zip");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      $('input[type=file]')
+        .val('');
+      $('.bootstrap-filestyle>input[type=text]')
+        .val('');
+      $('select').empty()
+        .attr("disabled","disabled");
+      $('button')
+        .attr("disabled","disabled");
+
+    setTimeout(function(){
+      $('#progress-modal').modal('hide');
+    },3000);
+})
+
+socket.on("disconnect",()=>{
   console.log("INFO - Connection closed");
   $('#warning').modal({
     keyboard:false,
@@ -210,4 +195,4 @@ ws.onclose = function(event){
   $('#warningButton').on("click",function(){
     location.reload();
   });
-};
+})

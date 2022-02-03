@@ -1,5 +1,10 @@
-var host = location.origin.replace(/^http/, 'ws'),
-    ws = new WebSocket(host);
+console.log(`wss://${location.host}`)
+
+host = `wss://${location.host}/`
+
+console.log(host)
+
+var ws = new WebSocket(host);
 
 ws.onopen = function(){
   console.log("INFO - Connection opened");

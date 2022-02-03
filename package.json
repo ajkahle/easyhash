@@ -22,7 +22,7 @@
     "ws": "*"
   },
   "engines": {
-    "node": "6.x"
+    "node": "14.x"
   },
   "repository": {
     "type": "git",

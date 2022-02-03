@@ -14,7 +14,7 @@ var express             = require('express'),
 
 var app = express(),
     server = http.createServer(app),
-    port = process.env.PORT || 5000;
+    port = process.env.PORT || 443;
 
 server.listen(port);
 console.log("http server listening on %d", port);
@@ -27,6 +27,19 @@ app.get('/',function(req,res){
 });
 
 var wss = new WebSocketServer({server: server});
+
+console.log(server.address())
+
+wss.on('listening',function(){
+  console.log('websocket server listening')
+  console.log(wss.address())
+})
+
+wss.on('error',function(err){
+  console.log('----WEBSOCKET ERROR----')
+  console.log(err)
+})
+
 wss.on("connection",function(ws){
   ws.on("message",function(event){
     var data = JSON.parse(event);

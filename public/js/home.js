@@ -119,24 +119,7 @@ socket.on("start",(msg)=>{
 })
 
 socket.on("progress",(msg)=>{
-  switch(data.type){
-    case "archive":
-      $('.progress-bar').width("100%");
-      $('#progressStage').text("Finalizing Files");
-    break;
-    case "start":
-      $('.progress-bar').width("0%");
-      $('#progressStage').text(data.stage+" "+parseInt((data.progress*100))+"%");
-    break;
-    case "done":
-      $('.progress-bar').width("100%");
-      $('#progressStage').text(data.stage+" 100%");
-    break;
-    case "update":
-      $('.progress-bar').width((data.progress*100)+"%");
-      $('#progressStage').text(data.stage+" "+parseInt((data.progress*100))+"%");
-    break;
-  }
+  console.log(msg)
 
 })
 
@@ -155,16 +138,19 @@ socket.on("error",(msg)=>{
 })
 
 socket.on("data",(data)=>{
-  console.log(data)
-
-  blobCombine.push(data)
+  console.log("data")
 })
 
 socket.on("completed",(msg)=>{
+  console.log("completed")
+  console.log(msg)
+  console.log(new Blob([msg]))
+  console.log(URL.createObjectURL(new Blob([msg])))
+
   $('.progress-bar').width("100%");
   $('#progressStage').text("Done!");
-  var file = new Blob(blobCombine);
-  var encodedUri = URL.createObjectURL(file);
+  var file = new Blob([msg]);
+  var encodedUri = URL.createObjectURL(new Blob([msg]));
   var link = document.createElement('a');
       link.setAttribute("href", encodedUri);
       link.setAttribute("download", "files.zip");

@@ -2,16 +2,22 @@ const express      = require('express')
 const http         = require('http')
 const arrayCompare = require('./lib/compare')
 const Hash         = require('./lib/hash')
-const Archive      = require('./lib/archive')
+const zip      = require('./lib/archive')
 const app          = express()
-const port         = process.env.PORT || 8000
+const port         = process.env.PORT || 8080
 const server       = http.Server(app)
-const io = require('socket.io')(server)
+const io           = require('socket.io')(server)
 require('dotenv').config()
+
+const Zipit        = require('zipit')
+const async        = require('async');
+const json2csv     = require('json2csv');
 
 const compare = new arrayCompare
 const hash    = new Hash()
-const archive = new Archive()
+// const archive = new Archive()
+
+console.log(zip)
 
 server.listen(port);
 console.log("http server listening on %d", port);
@@ -22,11 +28,11 @@ app.get('/',function(req,res){
   res.sendFile(__dirname+'/public/home.html');
 });
 
-io.on("listening",()=>{
+io.once("listening",()=>{
   console.log('websocket listening')
 })
 
-io.on("connection",function(socket){
+io.on("connection",(socket) => {
   socket.on("singleFile",(event)=>{
     console.log("INFO - Start Single File Job");
     socket.emit("progress",JSON.stringify({id:"progress",type:"start",stage:"Hashing File"}));
@@ -34,27 +40,21 @@ io.on("connection",function(socket){
     var data = JSON.parse(event)
 
     hash
-      .on("start",(msg)=>{
+      .once("start",(msg)=>{
         console.log(msg)
       })
-      .on("progress",(update)=>{
+      .once("progress",(update)=>{
         socket.emit("progress",JSON.stringify({id:"progress",type:"update",stage:"Hashing File",progress:update}))
       })
-      .on("completed",(hashed)=>{
-        archive
-          .on("start",(msg)=>{
-            console.log(msg)
-          })
-          .on("data",(d)=>{
-            socket.emit("data",d)
-          })
-          .on("completed",(zip_file)=>{
-            socket.emit("completed",{})
-          })
+      .once("completed",(hashed)=>{
+        console.log("hash complete")
 
-        archive.archiveFiles(hashed)
+        zip(hashed,function(err,data){
+          socket.emit("completed",data)
+        })
+
       })
-      .on("error",(err)=>{
+      .once("error",(err)=>{
         console.log(err)
         socket.emit("error",JSON.stringify({error:err}))
       })
@@ -63,38 +63,29 @@ io.on("connection",function(socket){
 
   })
 
-  socket.on("compareFiles",(event)=>{
+  socket.once("compareFiles",(event)=>{
     console.log("INFO - Start Compare Job");
     socket.emit("progress",JSON.stringify({id:"progress",type:"start",stage:"Hashing File"}));
 
     var data = JSON.parse(event)
 
     hash
-      .on("start",(msg)=>{
+      .once("start",(msg)=>{
         console.log(msg)
       })
-      .on("progress",(update)=>{
+      .once("progress",(update)=>{
         socket.emit("progress",JSON.stringify({id:"progress",type:"update",stage:"Hashing File",progress:update}))
       })
-      .on("completed",(hashed)=>{
-        compare.on("done",function(files){
-          archive
-            .on("start",(msg)=>{
-              console.log(msg)
-            })
-            .on("data",(d)=>{
-              socket.emit("data",d)
-            })
-            .on("completed",(zip_file)=>{
-              socket.emit("completed",{})
-            })
-
-          archive.archiveFiles({my_unique:files.missing,other_unique:files.added,overlap:files.found})
+      .once("completed",(hashed)=>{
+        compare.once("done",function(files){
+          zip(files,function(err,data){
+            socket.emit("completed",data)
+          })
         })
 
         compare.run(hashed.all_data,data.compareData,'hash',data.compareHashField)
       })
-      .on("error",(err)=>{
+      .once("error",(err)=>{
         console.log(err)
         socket.emit("error",JSON.stringify({error:err}))
       })

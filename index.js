@@ -9,18 +9,26 @@ const server       = http.Server(app)
 const io           = require('socket.io')(server)
 require('dotenv').config()
 
-const Zipit        = require('zipit')
-const async        = require('async');
-const json2csv     = require('json2csv');
-
 const compare = new arrayCompare
 const hash    = new Hash()
-// const archive = new Archive()
-
-console.log(zip)
 
 server.listen(port);
 console.log("http server listening on %d", port);
+
+function isSecure(req) {
+  if (req.headers['x-forwarded-proto']) {
+    return req.headers['x-forwarded-proto'] === 'https';
+  }
+  return req.secure;
+};
+
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test' && !isSecure(req)) {
+    res.redirect(301, `https://${req.headers.host}${req.url}`);
+  } else {
+    next();
+  }
+});
 
 app.use(express.static(__dirname + '/public'));
 
